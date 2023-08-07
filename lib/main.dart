@@ -1,3 +1,4 @@
+import 'package:firebase/screens/number_screen.dart';
 import 'package:firebase/screens/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _FirebaseConnectivityState extends State<FirebaseConnectivity> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SignUp(),
+      home: NumberScreen(),
     );
   }
 }
