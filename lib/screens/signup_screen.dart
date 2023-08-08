@@ -23,13 +23,11 @@ class _SignUpState extends State<SignUp> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneNoController = TextEditingController();
 
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xffE8EBF5),
@@ -72,7 +70,6 @@ class _SignUpState extends State<SignUp> {
                       return null; // Return null if the input is valid
                     },
                   ),
-
                   const SizedBox(height: 20),
                   TextFormFieldWidget(
                     controller: _passwordController,
@@ -92,7 +89,7 @@ class _SignUpState extends State<SignUp> {
                       child: Icon(
                           visibility ? Icons.visibility : Icons.visibility_off,
                           color:
-                          visibility ? Colors.black : Colors.grey.shade400),
+                              visibility ? Colors.black : Colors.grey.shade400),
                     ),
                     obscure: visibility,
                     validator: (value) {
@@ -105,32 +102,42 @@ class _SignUpState extends State<SignUp> {
                     },
                   ),
                   const SizedBox(height: 20),
+                  TextFormFieldWidget(
+                    controller: _usernameController,
+                    prefixIcon: Icons.person,
+                    hintText: "Enter username",
+                    labelText: "username",
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'username is required';
+                      }
+                      return null; // Return null if the input is valid
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormFieldWidget(
+                    controller: _phoneNoController,
+                    prefixIcon: Icons.phone,
+                    hintText: "Enter Phone NUmber",
+                    labelText: "Phone NUmber",
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Phone number is required';
+                      }
+                      return null; // Return null if the input is valid
+                    },
+                  ),
+                  const SizedBox(height: 20),
                   ButtonWidget(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        try {
-                          UserCredential user =
-                          await _auth.createUserWithEmailAndPassword(
-                            email: _emailController.text.trim().toString(),
-                            password:
-                            _passwordController.text.trim().toString(),
-                          );
-                          if (user != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()),
-                            );
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'email-already-in-use') {
-                            showSnackBar(
-                                'Try another Email, It\'s already in use',
-                                context);
-                          } else {
-                            showSnackBar("Error : ${e.code}", context);
-                          }
-                        }
+                        AuthServices().signUpUser(
+                          email: _emailController.text.trim().toString(),
+                          password: _passwordController.text.trim().toString(),
+                          username: _usernameController.text.trim().toString(),
+                          phoneNo: _phoneNoController.text.trim().toString(),
+                          context: context,
+                        );
                       }
                     },
                     buttonTitle: const Text("Register"),
@@ -143,13 +150,12 @@ class _SignUpState extends State<SignUp> {
                         "Already have an account?",
                       ),
                       TextButton(
-                        onPressed: () =>
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const LoginScreen(),
-                              ),
-                            ),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ),
+                        ),
                         child: const Text(
                           "Login?",
                           style: TextStyle(
@@ -166,22 +172,25 @@ class _SignUpState extends State<SignUp> {
                       SocialLogin(
                           imagePath: "assets/images/google.png",
                           onTap: () async {
-                            UserCredential userCredential = await AuthServices().signInWithGoogle();
-                            User? user = userCredential.user; // Extract the User object from UserCredential
-                            if(user !=null){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()),);
-                        }
-                      }),
-                      SizedBox(width: 40,),
+                            UserCredential userCredential =
+                                await AuthServices().signInWithGoogle();
+                            User? user = userCredential
+                                .user; // Extract the User object from UserCredential
+                            if (user != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                              );
+                            }
+                          }),
+                      SizedBox(
+                        width: 40,
+                      ),
                       SocialLogin(
                           imagePath: "assets/images/fb.png", onTap: () {})
-
                     ],
                   ),
-
-                  // _auth.signInWithEmailAndPassword(email: email, password: password)
-                  //
-                  // _auth.sendPasswordResetEmail(email: email)
                 ],
               ),
             ),
