@@ -30,7 +30,8 @@ here are simple steps to integrate with this function:
 - Run command `flutter clean` and `flutter build`
 Here is the Source code :
 `function`
-signInWithGoogle() async {
+
+**signInWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication gAuth = await gUser!.authentication;
     final credentials = GoogleAuthProvider.credential(
@@ -39,10 +40,10 @@ signInWithGoogle() async {
     );
     return await FirebaseAuth.instance.signInWithCredential(credentials);
   }
-
+**
 The function `calling` and You can also use your own logic
 
- onTap: () async {
+ **onTap: () async {
      UserCredential userCredential = await AuthServices().signInWithGoogle();
      User? user = userCredential.user; // Extract the User object from UserCredential
      if (user != null) {
@@ -50,3 +51,4 @@ The function `calling` and You can also use your own logic
     MaterialPageRoute(builder: (context) => HomeScreen()),                              );
    },
  }
+**
