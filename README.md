@@ -28,4 +28,25 @@ here are simple steps to integrate with this function:
 - Use these keys to authenticate your app in https://console.firebase.google.com/ or in your project **ADD KEY** option
 - Download and replace the google-services.json in your Android folder if commands did not download for you
 - Run command `flutter clean` and `flutter build`
+Here is the Source code :
+`
+signInWithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    final credentials = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+    return await FirebaseAuth.instance.signInWithCredential(credentials);
+  }
+`
+Function calling and You can also use your on logic
 
+` onTap: () async {
+     UserCredential userCredential = await AuthServices().signInWithGoogle();
+     User? user = userCredential.user; // Extract the User object from UserCredential
+     if (user != null) {
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => HomeScreen()),                              );
+   },
+ }`
