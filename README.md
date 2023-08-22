@@ -29,7 +29,7 @@ here are simple steps to integrate with this function:
 - Download and replace the google-services.json in your Android folder if commands did not download for you
 - Run command `flutter clean` and `flutter build`
 Here is the Source code :
-`
+`function`
 signInWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication gAuth = await gUser!.authentication;
@@ -39,14 +39,14 @@ signInWithGoogle() async {
     );
     return await FirebaseAuth.instance.signInWithCredential(credentials);
   }
-`
-Function calling and You can also use your on logic
 
-` onTap: () async {
+The function `calling` and You can also use your own logic
+
+ onTap: () async {
      UserCredential userCredential = await AuthServices().signInWithGoogle();
      User? user = userCredential.user; // Extract the User object from UserCredential
      if (user != null) {
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => HomeScreen()),                              );
    },
- }`
+ }
