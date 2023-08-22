@@ -31,6 +31,7 @@ here are simple steps to integrate with this function:
 Here is the Source code :
 `function`
 
+
 signInWithGoogle() async {
 
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
@@ -39,18 +40,16 @@ signInWithGoogle() async {
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
     );
-    return await FirebaseAuth.instance.signInWithCredential(credentials);
-  }
+    return await FirebaseAuth.instance.signInWithCredential(credentials);}
+  
+  
 
 The function `calling` and You can also use your own logic
 
 onTap: () async {
 
      UserCredential userCredential = await AuthServices().signInWithGoogle();
-     
-     User? user = userCredential.user; // Extract the User object from UserCredential
+          User? user = userCredential.user; // Extract the User object from UserCredential
        if (user != null) {
     Navigator.push(context,
-    MaterialPageRoute(builder: (context) => HomeScreen()),                              );
-   },
- }
+    MaterialPageRoute(builder: (context) => HomeScreen()),);}, }
